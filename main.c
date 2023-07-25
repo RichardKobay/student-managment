@@ -6,18 +6,18 @@ int main() {
     User currentUser;
     currentUser.id = 999999;
 
-    userLogIn(&currentUser);
+    logInUser(&currentUser);
+
 
     if (currentUser.id == 999999) {
         printf("\nExiting...");
         return 1;
     }
 
-    if (currentUser.isAdmin == 1) {
+    if (currentUser.id == 1)
         welcomeAdmin(&currentUser);
-    } else {
+    else
         welcomeNotAdmin(&currentUser);
-    }
 
     return 0;
 }
