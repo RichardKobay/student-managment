@@ -77,23 +77,32 @@ void welcomeNotAdmin(User *currentUser) {
     printf("What are we doing now?\n");
     printf("\n1. Show users list");
     printf("\n2. Show student list");
-    printf("\n3. Calculate average grade of a student");
-    printf("\n4. Search for a student");
-    printf("\n5. Show students by average grade");
-    printf("\n6. Show statistics");
-    printf("\n7. Generate an inform");
-    printf("\n8. Log out and exit");
+    printf("\n3. Search for a student");
+    printf("\n4. Show students by average grade");
+    printf("\n5. Show statistics");
+    printf("\n6. Generate an inform");
+    printf("\n7. Log out and exit");
     printf("\nPlease select an option: ");
     scanf("%d", &opt);
 
     if (opt >= 1 && opt <= 15) {
-        if (opt == 1) {
-            printf("Option 1");
-        }
-        if (opt == 8) {
+        if (opt == 1)
+            listUsers();
+        if (opt == 2)
+            showAllStudents();
+        if (opt == 3)
+            searchStudent();
+        if (opt == 4)
+            showAllStudentsByAverageGrade();
+        if (opt == 5)
+            showStatisticsOfStudent();
+        if (opt == 6)
+            generateInform();
+        if (opt == 7) {
             printf("Bye!\n");
             return;
         }
+        continueApp();
     } else {
         printf("Option not in menu\n");
     }

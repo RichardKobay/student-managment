@@ -106,19 +106,19 @@ void addStudent() {
     if (studentsFile == NULL)
         exit(1);
 
-    fwrite(&newStudent, sizeof (Student), 1, studentsFile);
+    fwrite(&newStudent, sizeof(Student), 1, studentsFile);
     printf("Student added successfully");
     fclose(studentsFile);
 }
 
-void showAllStudents () {
+void showAllStudents() {
     Student student;
     FILE *studentsFile;
     studentsFile = fopen("students.dat", "rb");
 
     if (studentsFile == NULL) exit(1);
 
-    fread(&student, sizeof (Student), 1, studentsFile);
+    fread(&student, sizeof(Student), 1, studentsFile);
 
     while (!feof(studentsFile)) {
         if (student.id != 0) {
@@ -141,7 +141,7 @@ void showAllStudents () {
     fclose(studentsFile);
 }
 
-void searchStudent () {
+void searchStudent() {
     int opc;
     printf("How do you wanna search the student\n");
     printf("1. By ID\n");
@@ -165,7 +165,7 @@ void searchStudent () {
     }
 }
 
-void searchStudentById () {
+void searchStudentById() {
     int id;
     printf("Please insert the ID: ");
     scanf("%d", &id);
@@ -178,7 +178,7 @@ void searchStudentById () {
     if (studentsFile == NULL)
         exit(1);
 
-    fread(&student, sizeof (Student), 1, studentsFile);
+    fread(&student, sizeof(Student), 1, studentsFile);
 
     while (!feof(studentsFile)) {
         if (student.id == id) {
@@ -197,7 +197,7 @@ void searchStudentById () {
             printf("------------------------------------------------------------\n");
             return;
         }
-        fread(&student, sizeof (Student), 1, studentsFile);
+        fread(&student, sizeof(Student), 1, studentsFile);
     }
 }
 
@@ -215,7 +215,7 @@ void searchStudentByName() {
     if (studentsFile == NULL)
         exit(1);
 
-    fread(&student, sizeof (Student), 1, studentsFile);
+    fread(&student, sizeof(Student), 1, studentsFile);
 
     while (!feof(studentsFile)) {
         if (strcmp(student.name, name) == 0) {
@@ -234,9 +234,10 @@ void searchStudentByName() {
             printf("------------------------------------------------------------\n");
             return;
         }
-        fread(&student, sizeof (Student), 1, studentsFile);
+        fread(&student, sizeof(Student), 1, studentsFile);
     }
 }
+
 void searchStudentByTuition() {
     char tuition[8];
     printf("Please insert the tuition: ");
@@ -251,7 +252,7 @@ void searchStudentByTuition() {
     if (studentsFile == NULL)
         exit(1);
 
-    fread(&student, sizeof (Student), 1, studentsFile);
+    fread(&student, sizeof(Student), 1, studentsFile);
 
     while (!feof(studentsFile)) {
         if (strcmp(student.matricula, tuition) == 0) {
@@ -270,7 +271,7 @@ void searchStudentByTuition() {
             printf("------------------------------------------------------------\n");
             return;
         }
-        fread(&student, sizeof (Student), 1, studentsFile);
+        fread(&student, sizeof(Student), 1, studentsFile);
     }
 }
 
@@ -287,7 +288,7 @@ void removeStudent() {
     scanf("%i", &id);
 
 
-    fread(&student, sizeof (Student), 1, studentsFile);
+    fread(&student, sizeof(Student), 1, studentsFile);
 
     while (!feof(studentsFile)) {
         if (id == student.id) {
@@ -327,13 +328,13 @@ void removeStudent() {
             student.valores = 0.0;
             student.averageGrade = 0.0;
 
-            int pos = ftell(studentsFile) - sizeof (Student);
+            int pos = ftell(studentsFile) - sizeof(Student);
             fseek(studentsFile, pos, SEEK_SET);
-            fwrite(&student, sizeof (Student), 1, studentsFile);
+            fwrite(&student, sizeof(Student), 1, studentsFile);
             printf("The student was deleted\n");
             break;
         }
-        fread(&student, sizeof (Student), 1, studentsFile);
+        fread(&student, sizeof(Student), 1, studentsFile);
     }
 
     printf("User not found");
@@ -355,7 +356,7 @@ void updateStudentInfo() {
 
     int userInFile = 0;
 
-    fread(&student, sizeof (Student), 1, studentsFile);
+    fread(&student, sizeof(Student), 1, studentsFile);
 
     while (!feof(studentsFile)) {
         if (id == student.id) {
@@ -423,14 +424,14 @@ void updateStudentInfo() {
                 goto GetData;
 
 
-            int pos = ftell(studentsFile) - sizeof (Student);
+            int pos = ftell(studentsFile) - sizeof(Student);
             fseek(studentsFile, pos, SEEK_SET);
-            fwrite(&student, sizeof (Student), 1, studentsFile);
+            fwrite(&student, sizeof(Student), 1, studentsFile);
             printf("The user was modified\n");
             userInFile = 1;
             break;
         }
-        fread(&student, sizeof (Student), 1, studentsFile);
+        fread(&student, sizeof(Student), 1, studentsFile);
     }
 
     if (!userInFile) {
@@ -441,13 +442,317 @@ void updateStudentInfo() {
 }
 
 void showAllStudentsByAverageGrade() {
+    Student student;
+    FILE *studentsFile;
+    studentsFile = fopen("students.dat", "rb");
 
+    if (studentsFile == NULL) exit(1);
+
+    fread(&student, sizeof(Student), 1, studentsFile);
+
+    while (!feof(studentsFile)) {
+        if (student.id != 0) {
+            printf("------------------------------------------------------------\n");
+            printf("|id              %-42d|\n", student.id);
+            printf("|matricula       %-42s|\n", student.matricula);
+            printf("|name            %-42s|\n", student.name);
+            printf("|averageGrade    %-42.1lf|\n", student.averageGrade);
+            printf("------------------------------------------------------------\n");
+        }
+        fread(&student, sizeof(Student), 1, studentsFile);
+    }
+    fclose(studentsFile);
 }
 
 void showStatisticsOfStudent() {
+    int id;
+    printf("Please insert the ID: ");
+    scanf("%d", &id);
 
+    Student student;
+    FILE *studentsFile;
+
+    studentsFile = fopen("students.dat", "rb");
+
+    if (studentsFile == NULL)
+        exit(1);
+
+    fread(&student, sizeof(Student), 1, studentsFile);
+
+    while (!feof(studentsFile)) {
+        if (student.id == id) {
+            double highestGrade = 0;
+            char sHighestGrade[20];
+            if ((student.calculo > student.mantenimiento) &&
+                (student.calculo > student.valores) &&
+                (student.calculo > student.redes) &&
+                (student.calculo > student.programacion) &&
+                (student.calculo) > student.probabilidad) {
+                highestGrade = student.calculo;
+                strcpy(sHighestGrade, "Calculo");
+            }
+
+            if ((student.redes > student.mantenimiento) &&
+                (student.redes > student.valores) &&
+                (student.redes > student.calculo) &&
+                (student.redes > student.programacion) &&
+                (student.redes) > student.probabilidad) {
+                highestGrade = student.redes;
+                strcpy(sHighestGrade, "Redes");
+            }
+
+            if ((student.programacion > student.mantenimiento) &&
+                (student.programacion > student.valores) &&
+                (student.programacion > student.redes) &&
+                (student.programacion > student.calculo) &&
+                (student.programacion) > student.probabilidad) {
+                highestGrade = student.programacion;
+                strcpy(sHighestGrade, "Programación");
+            }
+
+            if ((student.probabilidad > student.mantenimiento) &&
+                (student.probabilidad > student.valores) &&
+                (student.probabilidad > student.redes) &&
+                (student.probabilidad > student.calculo) &&
+                (student.probabilidad) > student.probabilidad) {
+                highestGrade = student.probabilidad;
+                strcpy(sHighestGrade, "Probabilidad");
+            }
+
+            if ((student.mantenimiento > student.programacion) &&
+                (student.mantenimiento > student.valores) &&
+                (student.mantenimiento > student.redes) &&
+                (student.mantenimiento > student.calculo) &&
+                (student.mantenimiento) > student.probabilidad) {
+                highestGrade = student.mantenimiento;
+                strcpy(sHighestGrade, "Mantenimiento");
+            }
+
+            if ((student.valores > student.mantenimiento) &&
+                (student.valores > student.programacion) &&
+                (student.valores > student.redes) &&
+                (student.valores > student.calculo) &&
+                (student.valores) > student.probabilidad) {
+                highestGrade = student.valores;
+                strcpy(sHighestGrade, "Valores");
+            }
+
+            double lowestGrade = 0;
+            char sLowestGrade[20];
+            strcpy(sLowestGrade, "Calculo");
+            lowestGrade = 100;
+            if ((student.calculo < student.mantenimiento) &&
+                (student.calculo < student.valores) &&
+                (student.calculo < student.redes) &&
+                (student.calculo < student.programacion) &&
+                (student.calculo < student.probabilidad)) {
+                lowestGrade = student.calculo;
+                strcpy(sLowestGrade, "Calculo");
+            }
+
+            if ((student.redes < student.mantenimiento) &&
+                (student.redes < student.valores) &&
+                (student.redes < student.calculo) &&
+                (student.redes < student.programacion) &&
+                (student.redes < student.probabilidad)) {
+                lowestGrade = student.redes;
+                strcpy(sLowestGrade, "Redes");
+            }
+
+            if ((student.programacion < student.mantenimiento) &&
+                (student.programacion < student.valores) &&
+                (student.programacion < student.redes) &&
+                (student.programacion < student.calculo) &&
+                (student.programacion < student.probabilidad)) {
+                lowestGrade = student.programacion;
+                strcpy(sLowestGrade, "Programación");
+            }
+
+            if ((student.probabilidad < student.mantenimiento) &&
+                (student.probabilidad < student.valores) &&
+                (student.probabilidad < student.redes) &&
+                (student.probabilidad < student.calculo) &&
+                (student.probabilidad < student.probabilidad)) {
+                lowestGrade = student.probabilidad;
+                strcpy(sLowestGrade, "Probabilidad");
+            }
+
+            if ((student.mantenimiento < student.programacion) &&
+                (student.mantenimiento < student.valores) &&
+                (student.mantenimiento < student.redes) &&
+                (student.mantenimiento < student.calculo) &&
+                (student.mantenimiento < student.probabilidad)) {
+                lowestGrade = student.mantenimiento;
+                strcpy(sLowestGrade, "Mantenimiento");
+            }
+
+            if ((student.valores < student.mantenimiento) &&
+                (student.valores < student.programacion) &&
+                (student.valores < student.redes) &&
+                (student.valores < student.calculo) &&
+                (student.valores < student.probabilidad)) {
+                lowestGrade = student.valores;
+                strcpy(sLowestGrade, "Valores");
+            }
+
+            printf("------------------------------------------------------------\n");
+            printf("|id              %-42d|\n", student.id);
+            printf("|matricula       %-42s|\n", student.matricula);
+            printf("|name            %-42s|\n", student.name);
+            printf("|age             %-42d|\n", student.age);
+            printf("|averageGrade    %-42.1lf|\n", student.averageGrade);
+            printf("|Highest grade:  %-12s %-30.1lf|\n", sHighestGrade, highestGrade);
+            printf("|Lowest grade:   %-12s %-30.1lf|\n", sLowestGrade, lowestGrade);
+            printf("------------------------------------------------------------\n");
+            return;
+        }
+        fread(&student, sizeof(Student), 1, studentsFile);
+    }
 }
 
 void generateInform() {
+    int id;
+    printf("Please insert the ID: ");
+    scanf("%d", &id);
 
+    Student student;
+    FILE *studentsFile;
+
+    studentsFile = fopen("students.dat", "rb");
+
+    if (studentsFile == NULL)
+        exit(1);
+
+    fread(&student, sizeof(Student), 1, studentsFile);
+
+    while (!feof(studentsFile)) {
+        if (student.id == id) {
+            double highestGrade = 0;
+            char sHighestGrade[20];
+            if ((student.calculo > student.mantenimiento) &&
+                (student.calculo > student.valores) &&
+                (student.calculo > student.redes) &&
+                (student.calculo > student.programacion) &&
+                (student.calculo) > student.probabilidad) {
+                highestGrade = student.calculo;
+                strcpy(sHighestGrade, "Calculo");
+            }
+
+            if ((student.redes > student.mantenimiento) &&
+                (student.redes > student.valores) &&
+                (student.redes > student.calculo) &&
+                (student.redes > student.programacion) &&
+                (student.redes) > student.probabilidad) {
+                highestGrade = student.redes;
+                strcpy(sHighestGrade, "Redes");
+            }
+
+            if ((student.programacion > student.mantenimiento) &&
+                (student.programacion > student.valores) &&
+                (student.programacion > student.redes) &&
+                (student.programacion > student.calculo) &&
+                (student.programacion) > student.probabilidad) {
+                highestGrade = student.programacion;
+                strcpy(sHighestGrade, "Programación");
+            }
+
+            if ((student.probabilidad > student.mantenimiento) &&
+                (student.probabilidad > student.valores) &&
+                (student.probabilidad > student.redes) &&
+                (student.probabilidad > student.calculo) &&
+                (student.probabilidad) > student.probabilidad) {
+                highestGrade = student.probabilidad;
+                strcpy(sHighestGrade, "Probabilidad");
+            }
+
+            if ((student.mantenimiento > student.programacion) &&
+                (student.mantenimiento > student.valores) &&
+                (student.mantenimiento > student.redes) &&
+                (student.mantenimiento > student.calculo) &&
+                (student.mantenimiento) > student.probabilidad) {
+                highestGrade = student.mantenimiento;
+                strcpy(sHighestGrade, "Mantenimiento");
+            }
+
+            if ((student.valores > student.mantenimiento) &&
+                (student.valores > student.programacion) &&
+                (student.valores > student.redes) &&
+                (student.valores > student.calculo) &&
+                (student.valores) > student.probabilidad) {
+                highestGrade = student.valores;
+                strcpy(sHighestGrade, "Valores");
+            }
+
+            double lowestGrade = 0;
+            char sLowestGrade[20];
+            strcpy(sLowestGrade, "Calculo");
+            lowestGrade = 100;
+
+            if ((student.calculo < student.mantenimiento) &&
+                (student.calculo < student.valores) &&
+                (student.calculo < student.redes) &&
+                (student.calculo < student.programacion) &&
+                (student.calculo < student.probabilidad)) {
+                lowestGrade = student.calculo;
+                strcpy(sLowestGrade, "Calculo");
+            }
+
+            if ((student.redes < student.mantenimiento) &&
+                (student.redes < student.valores) &&
+                (student.redes < student.calculo) &&
+                (student.redes < student.programacion) &&
+                (student.redes < student.probabilidad)) {
+                lowestGrade = student.redes;
+                strcpy(sLowestGrade, "Redes");
+            }
+
+            if ((student.programacion < student.mantenimiento) &&
+                (student.programacion < student.valores) &&
+                (student.programacion < student.redes) &&
+                (student.programacion < student.calculo) &&
+                (student.programacion < student.probabilidad)) {
+                lowestGrade = student.programacion;
+                strcpy(sLowestGrade, "Programación");
+            }
+
+            if ((student.probabilidad < student.mantenimiento) &&
+                (student.probabilidad < student.valores) &&
+                (student.probabilidad < student.redes) &&
+                (student.probabilidad < student.calculo) &&
+                (student.probabilidad < student.probabilidad)) {
+                lowestGrade = student.probabilidad;
+                strcpy(sLowestGrade, "Probabilidad");
+            }
+
+            if ((student.mantenimiento < student.programacion) &&
+                (student.mantenimiento < student.valores) &&
+                (student.mantenimiento < student.redes) &&
+                (student.mantenimiento < student.calculo) &&
+                (student.mantenimiento < student.probabilidad)) {
+                lowestGrade = student.mantenimiento;
+                strcpy(sLowestGrade, "Mantenimiento");
+            }
+
+            if ((student.valores < student.mantenimiento) &&
+                (student.valores < student.programacion) &&
+                (student.valores < student.redes) &&
+                (student.valores < student.calculo) &&
+                (student.valores < student.probabilidad)) {
+                lowestGrade = student.valores;
+                strcpy(sLowestGrade, "Valores");
+            }
+
+            printf("------------------------------------------------------------\n");
+            printf("|id              %-42d|\n", student.id);
+            printf("|matricula       %-42s|\n", student.matricula);
+            printf("|name            %-42s|\n", student.name);
+            printf("|age             %-42d|\n", student.age);
+            printf("|averageGrade    %-42.1lf|\n", student.averageGrade);
+            printf("|Highest grade:  %-12s %-30.1lf|\n", sHighestGrade, highestGrade);
+            printf("|Lowest grade:   %-12s %-30.1lf|\n", sLowestGrade, lowestGrade);
+            printf("------------------------------------------------------------\n");
+            return;
+        }
+        fread(&student, sizeof(Student), 1, studentsFile);
+    }
 }
