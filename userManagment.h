@@ -19,7 +19,6 @@ void signUpUser();
 void logInUser (User *currentUser);
 void listUsers();
 void modifyUser ();
-void welcomeAdmin(User *currentUser);
-void welcomeNotAdmin(User *currentUser);
+void deleteUser ();
 
 #endif //PROYECTO_VACACIONAL_USERMANAGMENT_H
