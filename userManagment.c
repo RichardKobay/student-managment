@@ -79,7 +79,9 @@ void logInUser (User *currentUser) {
     if (file == NULL) {
         printf("Users file not found...\n");
         printf("The default user now will be \"root\" with password \"root\"\n");
+        printf("Exiting...");
         createUsersFile();
+        exit(1);
     }
 
     char sUser[20];
@@ -122,7 +124,9 @@ void listUsers() {
     fread(&user, sizeof(user), 1, file);
 
     while (!feof(file)) {
-        printf("%i, %s, %s, %i\n", user.id, user.user, user.password, user.isAdmin);
+        if (user.id != 0) {
+            printf("%i, %s, %s, %i\n", user.id, user.user, user.password, user.isAdmin);
+        }
         fread(&user, sizeof(user), 1, file);
     }
     fclose(file);
@@ -188,7 +192,7 @@ void deleteUser () {
     printf("Are you sure? this action can't be undone...\n 1. Yes\n 2. No");
     int opt;
     scanf("%d", &opt);
-    if (opt == 0)
+    if (opt != 1)
         return;
 
 
@@ -251,6 +255,8 @@ void welcomeAdmin(User *currentUser) {
             signUpUser();
         if (opt == 2)
             modifyUser();
+        if (opt == 3)
+            deleteUser();
         if (opt == 4)
             listUsers();
         if (opt == 15) {
