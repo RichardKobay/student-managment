@@ -50,7 +50,7 @@ void welcomeAdmin(User *currentUser) {
             updateStudentInfo();
         if (opt == 12)
             generateInform();
-        if (opt == 15) {
+        if (opt == 13) {
             printf("Bye!\n");
             exit(0);
         }
